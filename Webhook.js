@@ -14,9 +14,13 @@ function doPost(e) {
     const date = Utilities.formatDate(dateNow, "Asia/Tokyo", "yyyy/MM/dd HH:mm:ss");
 
     //取得したメッセージのurl先のhtmlから<tytle>タグ内のデータを取得
-    let response = UrlFetchApp.fetch(userMessage);
-    let content = response.getContentText("utf-8");
-    const title = Parser.data(content).from('<title>').to('</title>').iterate();
+    try {
+      let response = UrlFetchApp.fetch(userMessage);
+      let content = response.getContentText("utf-8");
+      let title = Parser.data(content).from('<title>').to('</title>').iterate();
+    } catch(e) {
+      let title = userMessage
+    }
 
     //userの名前を取得
     const endPoint = `https://api.line.me/v2/bot/profile/${userId}`;
